@@ -54,7 +54,7 @@ kubeadm_version: "{{ kube_version }}"
 etcd_version: v3.3.10
 
 # kubernetes image repo define
-kube_image_repo: "gcr.io/google-containers"
+kube_image_repo: "registry.aliyuncs.com/google-containers"
 
 # TODO(mattymo): Move calico versions to roles/network_plugins/calico/defaults
 # after migration to container download
@@ -80,12 +80,12 @@ multus_version: "v3.1.autoconf"
 crictl_version: "v1.14.0"
 
 # Download URLs
-kubeadm_download_url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubeadm_version }}/bin/linux/{{ image_arch }}/kubeadm"
-hyperkube_download_url: "https://storage.googleapis.com/kubernetes-release/release/{{ kube_version }}/bin/linux/{{ image_arch }}/hyperkube"
-etcd_download_url: "https://github.com/coreos/etcd/releases/download/{{ etcd_version }}/etcd-{{ etcd_version }}-linux-{{ image_arch }}.tar.gz"
-cni_download_url: "https://github.com/containernetworking/plugins/releases/download/{{ cni_version }}/cni-plugins-linux-{{ image_arch }}-{{ cni_version }}.tgz"
-calicoctl_download_url: "https://github.com/projectcalico/calicoctl/releases/download/{{ calico_ctl_version }}/calicoctl-linux-{{ image_arch }}"
-crictl_download_url: "https://github.com/kubernetes-sigs/cri-tools/releases/download/{{ crictl_version }}/crictl-{{ crictl_version }}-{{ ansible_system | lower }}-{{ image_arch }}.tar.gz"
+kubeadm_download_url: "http://devops.dcjet.com.cn:52000/mirrors/kubeadm"
+hyperkube_download_url: "http://devops.dcjet.com.cn:52000/mirrors/hyperkube"
+etcd_download_url: "http://devops.dcjet.com.cn:52000/mirrors/etcd-v3.3.10-linux-amd64.tar.gz"
+cni_download_url: "http://devops.dcjet.com.cn:52000/mirrors/cni-plugins-linux-amd64-v0.8.1.tgz"
+calicoctl_download_url: "http://devops.dcjet.com.cn:52000/mirrors/calicoctl-linux-amd64"
+crictl_download_url: "https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.14.0/crictl-v1.14.0-{{ ansible_system | lower }}-amd64.tar.gz"
 
 crictl_checksums:
   arm:
@@ -205,7 +205,7 @@ calico_rr_image_repo: "docker.io/calico/routereflector"
 calico_rr_image_tag: "{{ calico_rr_version }}"
 calico_typha_image_repo: "docker.io/calico/typha"
 calico_typha_image_tag: "{{ calico_typha_version }}"
-pod_infra_image_repo: "gcr.io/google_containers/pause-{{ image_arch }}"
+pod_infra_image_repo: "registry.aliyuncs.com/google_containers/pause-{{ image_arch }}"
 pod_infra_image_tag: "{{ pod_infra_version }}"
 install_socat_image_repo: "docker.io/xueshanf/install-socat"
 install_socat_image_tag: "latest"
@@ -247,11 +247,11 @@ coredns_image_repo: "docker.io/coredns/coredns"
 coredns_image_tag: "{{ coredns_version }}"
 
 nodelocaldns_version: "1.15.1"
-nodelocaldns_image_repo: "k8s.gcr.io/k8s-dns-node-cache"
+nodelocaldns_image_repo: "mirrorgooglecontainers/k8s-dns-node-cache"
 nodelocaldns_image_tag: "{{ nodelocaldns_version }}"
 
 dnsautoscaler_version: 1.6.0
-dnsautoscaler_image_repo: "k8s.gcr.io/cluster-proportional-autoscaler-{{ image_arch }}"
+dnsautoscaler_image_repo: "mirrorgooglecontainers/cluster-proportional-autoscaler-{{ image_arch }}"
 dnsautoscaler_image_tag: "{{ dnsautoscaler_version }}"
 test_image_repo: docker.io/busybox
 test_image_tag: latest
@@ -260,15 +260,15 @@ busybox_image_tag: 1.29.2
 helm_version: "v2.13.1"
 helm_image_repo: "docker.io/lachlanevenson/k8s-helm"
 helm_image_tag: "{{ helm_version }}"
-tiller_image_repo: "gcr.io/kubernetes-helm/tiller"
+tiller_image_repo: "registry.aliyuncs.com/kubernetes-helm/tiller"
 tiller_image_tag: "{{ helm_version }}"
 
 registry_image_repo: "docker.io/registry"
 registry_image_tag: "2.6"
-registry_proxy_image_repo: "gcr.io/google_containers/kube-registry-proxy"
+registry_proxy_image_repo: "registry.aliyuncs.com/google_containers/kube-registry-proxy"
 registry_proxy_image_tag: "0.4"
 metrics_server_version: "v0.3.3"
-metrics_server_image_repo: "gcr.io/google_containers/metrics-server-amd64"
+metrics_server_image_repo: "registry.aliyuncs.com/google_containers/metrics-server-amd64"
 metrics_server_image_tag: "{{ metrics_server_version }}"
 local_volume_provisioner_image_repo: "quay.io/external_storage/local-volume-provisioner"
 local_volume_provisioner_image_tag: "v2.3.2"
@@ -284,10 +284,10 @@ cert_manager_version: "v0.5.2"
 cert_manager_controller_image_repo: "quay.io/jetstack/cert-manager-controller"
 cert_manager_controller_image_tag: "{{ cert_manager_version }}"
 addon_resizer_version: "1.8.3"
-addon_resizer_image_repo: "k8s.gcr.io/addon-resizer"
+addon_resizer_image_repo: "mirrorgooglecontainers/addon-resizer"
 addon_resizer_image_tag: "{{ addon_resizer_version }}"
 
-dashboard_image_repo: "gcr.io/google_containers/kubernetes-dashboard-{{ image_arch }}"
+dashboard_image_repo: "registry.aliyuncs.com/google_containers/kubernetes-dashboard-{{ image_arch }}"
 dashboard_image_tag: "v1.10.1"
 
 image_pull_command: "{{ docker_bin_dir }}/docker pull"

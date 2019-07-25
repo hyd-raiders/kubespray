@@ -1,210 +1,104 @@
-![Kubernetes Logo](https://raw.githubusercontent.com/kubernetes-sigs/kubespray/master/docs/img/kubernetes-logo.png)
+## kubespray
 
-Deploy a Production Ready Kubernetes Cluster
-============================================
+[origin docs](./README.origin.md)
 
-If you have questions, check the [documentation](https://kubespray.io) and join us on the [kubernetes slack](https://kubernetes.slack.com), channel **\#kubespray**.
-You can get your invite [here](http://slack.k8s.io/)
+## 特别说明
 
--   Can be deployed on **AWS, GCE, Azure, OpenStack, vSphere, Packet (bare metal), Oracle Cloud Infrastructure (Experimental), or Baremetal**
--   **Highly available** cluster
--   **Composable** (Choice of the network plugin for instance)
--   Supports most popular **Linux distributions**
--   **Continuous integration tests**
+由于国内情况比较特殊，某些大文件下载会出现问题，故在原项目基础下修改，以满足国内需求
 
-Quick Start
------------
 
-To deploy the cluster you can use :
 
-### Ansible
 
-#### Usage
+## install
+```bash
+# pip3 install first  
+# https://github.com/apporoad/eploy/blob/master/docs/python3.md
 
-    # Install dependencies from ``requirements.txt``
-    sudo pip install -r requirements.txt
+## ssh免密登录 https://github.com/apporoad/eploy/blob/master/docs/sshLogin.md
 
-    # Copy ``inventory/sample`` as ``inventory/mycluster``
-    cp -rfp inventory/sample inventory/mycluster
 
-    # Update Ansible inventory file with inventory builder
-    declare -a IPS=(10.10.1.3 10.10.1.4 10.10.1.5)
-    CONFIG_FILE=inventory/mycluster/hosts.yml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
-
-    # Review and change parameters under ``inventory/mycluster/group_vars``
-    cat inventory/mycluster/group_vars/all/all.yml
-    cat inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml
-
-    # Deploy Kubespray with Ansible Playbook - run the playbook as root
-    # The option `--become` is required, as for example writing SSL keys in /etc/,
-    # installing packages and interacting with various systemd daemons.
-    # Without --become the playbook will fail to run!
-    ansible-playbook -i inventory/mycluster/hosts.yml --become --become-user=root cluster.yml
-
-Note: When Ansible is already installed via system packages on the control machine, other python packages installed via `sudo pip install -r requirements.txt` will go to a different directory tree (e.g. `/usr/local/lib/python2.7/dist-packages` on Ubuntu) from Ansible's (e.g. `/usr/lib/python2.7/dist-packages/ansible` still on Ubuntu).
-As a consequence, `ansible-playbook` command will fail with:
 ```
-ERROR! no action detected in task. This often indicates a misspelled module name, or incorrect module path.
+[getting-start](https://github.com/hyd-raiders/kubespray/blob/master/docs/getting-started.md)
+
+```bash
+cd kubespray
+
+pip install -r requirements.txt
+
+cp -r inventory/sample inventory/mycluster
+# here is ips 
+declare -a IPS=(xxxx xxxx)
+CONFIG_FILE=inventory/mycluster/hosts.yml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
+
+# apply
+ansible-playbook -i inventory/mycluster/hosts.yml cluster.yml -b -v \
+  --private-key=~/.ssh/id_rsa -c paramiko
 ```
-probably pointing on a task depending on a module present in requirements.txt (i.e. "unseal vault").
 
-One way of solving this would be to uninstall the Ansible package and then, to install it via pip but it is not always possible.
-A workaround consists of setting `ANSIBLE_LIBRARY` and `ANSIBLE_MODULE_UTILS` environment variables respectively to the `ansible/modules` and `ansible/module_utils` subdirectories of pip packages installation location, which can be found in the Location field of the output of `pip show [package]` before executing `ansible-playbook`.
 
-### Vagrant
 
-For Vagrant we need to install python dependencies for provisioning tasks.
-Check if Python and pip are installed:
 
-    python -V && pip -V
+## qa
 
-If this returns the version of the software, you're good to go. If not, download and install Python from here <https://www.python.org/downloads/source/>
-Install the necessary requirements
+```bash
+# libse 组件问题
+cp -r /usr/lib64/python2.6/site-packages/selinux /root/.pyenv/versions/2.7.14/lib/python2.7/site-packages/
+```
 
-    sudo pip install -r requirements.txt
-    vagrant up
 
-Documents
----------
 
--   [Requirements](#requirements)
--   [Kubespray vs ...](docs/comparisons.md)
--   [Getting started](docs/getting-started.md)
--   [Ansible inventory and tags](docs/ansible.md)
--   [Integration with existing ansible repo](docs/integration.md)
--   [Deployment data variables](docs/vars.md)
--   [DNS stack](docs/dns-stack.md)
--   [HA mode](docs/ha-mode.md)
--   [Network plugins](#network-plugins)
--   [Vagrant install](docs/vagrant.md)
--   [CoreOS bootstrap](docs/coreos.md)
--   [Debian Jessie setup](docs/debian.md)
--   [openSUSE setup](docs/opensuse.md)
--   [Downloaded artifacts](docs/downloads.md)
--   [Cloud providers](docs/cloud.md)
--   [OpenStack](docs/openstack.md)
--   [AWS](docs/aws.md)
--   [Azure](docs/azure.md)
--   [vSphere](docs/vsphere.md)
--   [Packet Host](docs/packet.md)
--   [Large deployments](docs/large-deployments.md)
--   [Upgrades basics](docs/upgrades.md)
--   [Roadmap](docs/roadmap.md)
 
-Supported Linux Distributions
------------------------------
 
--   **Container Linux by CoreOS**
--   **Debian** Buster, Jessie, Stretch, Wheezy
--   **Ubuntu** 16.04, 18.04
--   **CentOS/RHEL** 7
--   **Fedora** 28
--   **Fedora/CentOS** Atomic
--   **openSUSE** Leap 42.3/Tumbleweed
--   **Oracle Linux** 7
+## 改版说明
 
-Note: Upstart/SysV init based OS types are not supported.
+1. 采用国内镜像
 
-Supported Components
---------------------
+​      roles\download\defaults\main.yml
 
--   Core
-    -   [kubernetes](https://github.com/kubernetes/kubernetes) v1.15.0
-    -   [etcd](https://github.com/coreos/etcd) v3.3.10
-    -   [docker](https://www.docker.com/) v18.06 (see note)
-    -   [cri-o](http://cri-o.io/) v1.11.5 (experimental: see [CRI-O Note](docs/cri-o.md). Only on centos based OS)
--   Network Plugin
-    -   [cni-plugins](https://github.com/containernetworking/plugins) v0.8.1
-    -   [calico](https://github.com/projectcalico/calico) v3.7.3
-    -   [canal](https://github.com/projectcalico/canal) (given calico/flannel versions)
-    -   [cilium](https://github.com/cilium/cilium) v1.3.0
-    -   [contiv](https://github.com/contiv/install) v1.2.1
-    -   [flanneld](https://github.com/coreos/flannel) v0.11.0
-    -   [kube-router](https://github.com/cloudnativelabs/kube-router) v0.2.5
-    -   [multus](https://github.com/intel/multus-cni) v3.2.1
-    -   [weave](https://github.com/weaveworks/weave) v2.5.2
--   Application
-    -   [cephfs-provisioner](https://github.com/kubernetes-incubator/external-storage) v2.1.0-k8s1.11
-    -   [rbd-provisioner](https://github.com/kubernetes-incubator/external-storage) v2.1.1-k8s1.11
-    -   [cert-manager](https://github.com/jetstack/cert-manager) v0.5.2
-    -   [coredns](https://github.com/coredns/coredns) v1.5.2
-    -   [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.21.0
+```yaml
+# 修改，变成国内资源
+kubeadm_download_url: "http://devops.dcjet.com.cn:52000/mirrors/kubeadm"
+hyperkube_download_url: "http://devops.dcjet.com.cn:52000/mirrors/hyperkube"
+etcd_download_url: "http://devops.dcjet.com.cn:52000/mirrors/etcd-v3.3.10-linux-amd64.tar.gz"
+cni_download_url: "http://devops.dcjet.com.cn:52000/mirrors/cni-plugins-linux-amd64-v0.8.1.tgz"
+calicoctl_download_url: "http://devops.dcjet.com.cn:52000/mirrors/calicoctl-linux-amd64"
+crictl_download_url: "https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.14.0/crictl-v1.14.0-{{ ansible_system | lower }}-amd64.tar.gz"
+```
 
-Note: The list of validated [docker versions](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.13.md) was updated to 1.11.1, 1.12.1, 1.13.1, 17.03, 17.06, 17.09, 18.06. kubeadm now properly recognizes Docker 18.09.0 and newer, but still treats 18.06 as the default supported version. The kubelet might break on docker's non-standard version numbering (it no longer uses semantic versioning). To ensure auto-updates don't break your cluster look into e.g. yum versionlock plugin or apt pin).
 
-Requirements
-------------
--   **Minimum required version of Kubernetes is v1.13**
--   **Ansible v2.7.8 (or newer, but [not 2.8.x](https://github.com/kubernetes-sigs/kubespray/issues/4778)) and python-netaddr is installed on the machine
-    that will run Ansible commands**
--   **Jinja 2.9 (or newer) is required to run the Ansible Playbooks**
--   The target servers must have **access to the Internet** in order to pull docker images. Otherwise, additional configuration is required (See [Offline Environment](https://github.com/kubernetes-sigs/kubespray/blob/master/docs/downloads.md#offline-environment))
--   The target servers are configured to allow **IPv4 forwarding**.
--   **Your ssh key must be copied** to all the servers part of your inventory.
--   The **firewalls are not managed**, you'll need to implement your own rules the way you used to.
-    in order to avoid any issue during deployment you should disable your firewall.
--   If kubespray is ran from non-root user account, correct privilege escalation method
-    should be configured in the target servers. Then the `ansible_become` flag
-    or command parameters `--become or -b` should be specified.
 
-Hardware:
-These limits are safe guarded by Kubespray. Actual requirements for your workload can differ. For a sizing guide go to the [Building Large Clusters](https://kubernetes.io/docs/setup/cluster-large/#size-of-master-and-master-components) guide.
+2. 修改加速器
 
--   Master
-    - Memory: 1500 MB
--   Node
-    - Memory: 1024 MB
+   inventory\sample\group_vars\all\docker.yml
 
-Network Plugins
----------------
+   ```yaml
+   ## An obvious use case is allowing insecure-registry access to self hosted registries.
+   ## Can be ipaddress and domain_name.
+   ## example define 172.19.16.11 or mirror.registry.io
+   docker_insecure_registries:
+     - f1361db2.m.daocloud.io
+   
+   ## Add other registry,example China registry mirror.
+   docker_registry_mirrors:
+     - https://registry.docker-cn.com
+     - https://mirror.aliyuncs.com
+   ```
 
-You can choose between 6 network plugins. (default: `calico`, except Vagrant uses `flannel`)
+3. inventory\sample\group_vars\k8s-cluster\k8s-cluster.yml
 
--   [flannel](docs/flannel.md): gre/vxlan (layer 2) networking.
+   ```yaml
+## NVIDIA driver installer images. Change them if you have trouble accessing gcr.io.
+   nvidia_driver_install_centos_container: atzedevries/nvidia-centos-driver-installer:2
+   nvidia_driver_install_ubuntu_container: registry.aliyuncs.com/google-containers/ubuntu-nvidia-driver-installer@sha256:7df76a0f0a17294e86f691c81de6bbb7c04a1b4b3d4ea4e7e2cccdc42e1f6d63
+   ## NVIDIA GPU device plugin image.
+   nvidia_gpu_device_plugin_container: "mirrorgooglecontainers/nvidia-gpu-device-plugin@sha256:0842734032018be107fa2490c98156992911e3e1f2a21e059ff0105b07dd8e9e"
+   
+   ```
+   
+   
+   
+4. 修改镜像资源
 
--   [calico](docs/calico.md): bgp (layer 3) networking.
+   k8s.gcr.io  替换为 mirrorgooglecontainers
 
--   [canal](https://github.com/projectcalico/canal): a composition of calico and flannel plugins.
-
--   [cilium](http://docs.cilium.io/en/latest/): layer 3/4 networking (as well as layer 7 to protect and secure application protocols), supports dynamic insertion of BPF bytecode into the Linux kernel to implement security services, networking and visibility logic.
-
--   [contiv](docs/contiv.md): supports vlan, vxlan, bgp and Cisco SDN networking. This plugin is able to
-    apply firewall policies, segregate containers in multiple network and bridging pods onto physical networks.
-
--   [weave](docs/weave.md): Weave is a lightweight container overlay network that doesn't require an external K/V database cluster.
-    (Please refer to `weave` [troubleshooting documentation](https://www.weave.works/docs/net/latest/troubleshooting/)).
-
--   [kube-router](docs/kube-router.md): Kube-router is a L3 CNI for Kubernetes networking aiming to provide operational
-    simplicity and high performance: it uses IPVS to provide Kube Services Proxy (if setup to replace kube-proxy),
-    iptables for network policies, and BGP for ods L3 networking (with optionally BGP peering with out-of-cluster BGP peers).
-    It can also optionally advertise routes to Kubernetes cluster Pods CIDRs, ClusterIPs, ExternalIPs and LoadBalancerIPs.
-
--   [macvlan](docs/macvlan.md): Macvlan is a Linux network driver. Pods have their own unique Mac and Ip address, connected directly the physical (layer 2) network.
-
--   [multus](docs/multus.md): Multus is a meta CNI plugin that provides multiple network interface support to pods. For each interface Multus delegates CNI calls to secondary CNI plugins such as Calico, macvlan, etc.
-
-The choice is defined with the variable `kube_network_plugin`. There is also an
-option to leverage built-in cloud provider networking instead.
-See also [Network checker](docs/netcheck.md).
-
-Community docs and resources
-----------------------------
-
--   [kubernetes.io/docs/getting-started-guides/kubespray/](https://kubernetes.io/docs/getting-started-guides/kubespray/)
--   [kubespray, monitoring and logging](https://github.com/gregbkr/kubernetes-kargo-logging-monitoring) by @gregbkr
--   [Deploy Kubernetes w/ Ansible & Terraform](https://rsmitty.github.io/Terraform-Ansible-Kubernetes/) by @rsmitty
--   [Deploy a Kubernetes Cluster with Kubespray (video)](https://www.youtube.com/watch?v=N9q51JgbWu8)
-
-Tools and projects on top of Kubespray
---------------------------------------
-
--   [Digital Rebar Provision](https://github.com/digitalrebar/provision/blob/master/doc/integrations/ansible.rst)
--   [Terraform Contrib](https://github.com/kubernetes-sigs/kubespray/tree/master/contrib/terraform)
-
-CI Tests
---------
-
-[![Build graphs](https://gitlab.com/kargo-ci/kubernetes-sigs-kubespray/badges/master/build.svg)](https://gitlab.com/kargo-ci/kubernetes-sigs-kubespray/pipelines)
-
-CI/end-to-end tests sponsored by Google (GCE)
-See the [test matrix](docs/test_cases.md) for details.
+   gcr.io  替换为 registry.aliyuncs.com
