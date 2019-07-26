@@ -11,6 +11,9 @@
 
 ## install
 ```bash
+# firewalld
+systemctl disable firewalld
+systemctl stop firewalld
 # pip3 install first  
 # https://github.com/apporoad/eploy/blob/master/docs/python3.md
 
@@ -84,7 +87,7 @@ crictl_download_url: "https://github.com/kubernetes-sigs/cri-tools/releases/down
      - https://mirror.aliyuncs.com
    ```
 
-3. inventory\sample\group_vars\k8s-cluster\k8s-cluster.yml
+3.  inventory\sample\group_vars\k8s-cluster\k8s-cluster.yml
 
    ```yaml
 ## NVIDIA driver installer images. Change them if you have trouble accessing gcr.io.
@@ -102,3 +105,5 @@ crictl_download_url: "https://github.com/kubernetes-sigs/cri-tools/releases/down
    k8s.gcr.io  替换为 mirrorgooglecontainers
 
    gcr.io  替换为 registry.aliyuncs.com
+
+   其他资源修改

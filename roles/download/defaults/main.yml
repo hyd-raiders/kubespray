@@ -54,7 +54,7 @@ kubeadm_version: "{{ kube_version }}"
 etcd_version: v3.3.10
 
 # kubernetes image repo define
-kube_image_repo: "registry.aliyuncs.com/google-containers"
+kube_image_repo: "mirrorgooglecontainers"
 
 # TODO(mattymo): Move calico versions to roles/network_plugins/calico/defaults
 # after migration to container download
@@ -195,15 +195,15 @@ flannel_image_repo: "quay.io/coreos/flannel"
 flannel_image_tag: "{{ flannel_version }}"
 flannel_cni_image_repo: "quay.io/coreos/flannel-cni"
 flannel_cni_image_tag: "{{ flannel_cni_version }}"
-calico_node_image_repo: "docker.io/calico/node"
+calico_node_image_repo: "calico/node"
 calico_node_image_tag: "{{ calico_version }}"
-calico_cni_image_repo: "docker.io/calico/cni"
+calico_cni_image_repo: "calico/cni"
 calico_cni_image_tag: "{{ calico_cni_version }}"
 calico_policy_image_repo: "docker.io/calico/kube-controllers"
 calico_policy_image_tag: "{{ calico_policy_version }}"
-calico_rr_image_repo: "docker.io/calico/routereflector"
+calico_rr_image_repo: "calico/routereflector"
 calico_rr_image_tag: "{{ calico_rr_version }}"
-calico_typha_image_repo: "docker.io/calico/typha"
+calico_typha_image_repo: "calico/typha"
 calico_typha_image_tag: "{{ calico_typha_version }}"
 pod_infra_image_repo: "registry.aliyuncs.com/google_containers/pause-{{ image_arch }}"
 pod_infra_image_tag: "{{ pod_infra_version }}"
@@ -247,7 +247,7 @@ coredns_image_repo: "docker.io/coredns/coredns"
 coredns_image_tag: "{{ coredns_version }}"
 
 nodelocaldns_version: "1.15.1"
-nodelocaldns_image_repo: "mirrorgooglecontainers/k8s-dns-node-cache"
+nodelocaldns_image_repo: "googlecontainer/k8s-dns-node-cache"
 nodelocaldns_image_tag: "{{ nodelocaldns_version }}"
 
 dnsautoscaler_version: 1.6.0
