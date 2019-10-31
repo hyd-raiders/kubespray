@@ -247,7 +247,7 @@ coredns_image_repo: "docker.io/coredns/coredns"
 coredns_image_tag: "{{ coredns_version }}"
 
 nodelocaldns_version: "1.15.1"
-nodelocaldns_image_repo: "googlecontainer/k8s-dns-node-cache"
+nodelocaldns_image_repo: "mirrorgcrio/k8s-dns-node-cache"
 nodelocaldns_image_tag: "{{ nodelocaldns_version }}"
 
 dnsautoscaler_version: 1.6.0
