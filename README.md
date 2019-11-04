@@ -66,6 +66,8 @@ etcd_download_url: "http://devops.dcjet.com.cn:52000/mirrors/etcd-v3.3.10-linux-
 cni_download_url: "http://devops.dcjet.com.cn:52000/mirrors/cni-plugins-linux-amd64-v0.8.1.tgz"
 calicoctl_download_url: "http://devops.dcjet.com.cn:52000/mirrors/calicoctl-linux-amd64"
 crictl_download_url: "https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.14.0/crictl-v1.14.0-{{ ansible_system | lower }}-amd64.tar.gz"
+
+https://download.docker.com/linux 改为 http://mirrors.aliyun.com/docker-ce/linux
 ```
 
 

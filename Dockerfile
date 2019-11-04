@@ -6,9 +6,9 @@ RUN apt update -y && \
     apt install -y \
     libssl-dev python3-dev sshpass apt-transport-https jq \
     ca-certificates curl gnupg2 software-properties-common python3-pip rsync
-RUN  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+RUN  curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | apt-key add - && \
      add-apt-repository \
-     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+     "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu \
      $(lsb_release -cs) \
      stable" \
      && apt update -y && apt-get install docker-ce -y

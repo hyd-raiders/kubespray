@@ -1,7 +1,7 @@
 ---
 docker_kernel_min_version: '3.10'
 
-# https://download.docker.com/linux/ubuntu/
+# http://mirrors.aliyun.com/docker-ce/linux/ubuntu/
 docker_versioned_pkg:
   'latest': docker-ce
   '1.11': docker-engine=1.11.2-0~{{ ansible_distribution_release|lower }}

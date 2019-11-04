@@ -2,7 +2,7 @@
 docker_kernel_min_version: '0'
 
 # https://docs.docker.com/install/linux/docker-ce/fedora/
-# https://download.docker.com/linux/fedora/28/x86_64/stable/Packages/
+# http://mirrors.aliyun.com/docker-ce/linux/fedora/28/x86_64/stable/Packages/
 
 docker_versioned_pkg:
   'latest': docker-ce

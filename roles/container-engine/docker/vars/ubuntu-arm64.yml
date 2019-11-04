@@ -1,7 +1,7 @@
 ---
 docker_kernel_min_version: '3.10'
 
-# https://download.docker.com/linux/ubuntu/
+# http://mirrors.aliyun.com/docker-ce/linux/ubuntu/
 docker_versioned_pkg:
   'latest': docker-ce
   '17.09': docker-ce=17.09.1~ce-0~ubuntu
