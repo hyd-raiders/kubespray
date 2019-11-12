@@ -109,3 +109,8 @@ https://download.docker.com/linux 改为 http://mirrors.aliyun.com/docker-ce/lin
    gcr.io  替换为 registry.aliyuncs.com
 
    其他资源修改
+
+## todos
+
+1. 改成ali镜像
+2. 镜像本地导入方式
